@@ -51,7 +51,11 @@
       try {
         const enoki = Enoki.init({
           appName: "Stvor Messenger",
+<<<<<<< HEAD
           provider: "google", 
+=======
+          provider: "google", // можно заменить на github, twitch и др.
+>>>>>>> 6894cb8 (fix: update zkLogin layout in index.html)
         });
 
         const session = await enoki.signIn();
@@ -62,7 +66,11 @@
           Sui address: <code>${session.suiAddress}</code>
         `;
 
+<<<<<<< HEAD
 
+=======
+        // Далее можешь использовать session.suiAddress для отправки сообщений / транзакций
+>>>>>>> 6894cb8 (fix: update zkLogin layout in index.html)
       } catch (err) {
         console.error("Login error:", err);
         resultDiv.innerHTML = "❌ Login failed. See console for details.";
