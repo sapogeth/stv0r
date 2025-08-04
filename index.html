@@ -2,17 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stvor zkLogin Demo</title>
   <script src="https://cdn.jsdelivr.net/npm/@mysten/enoki@1.0.0-beta.10/dist/browser.umd.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: #121212;
       color: #fff;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 100px;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
     }
 
     #login-btn {
@@ -20,60 +31,103 @@
       background-color: #6366f1;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 1rem;
+      font-weight: 500;
       color: white;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     #login-btn:hover {
       background-color: #4f46e5;
+      transform: translateY(-2px);
+    }
+
+    #login-btn:disabled {
+      background-color: #4b5563;
+      cursor: not-allowed;
     }
 
     #result {
-      margin-top: 24px;
-      font-size: 14px;
-      max-width: 80%;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      max-width: 90%;
       word-break: break-word;
       text-align: center;
+      line-height: 1.5;
+    }
+
+    code {
+      background-color: #1f2937;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    @media (max-width: 600px) {
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      #login-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      #result {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h2>🔐 zkLogin Demo</h2>
-  <button id="login-btn">Sign in with zkLogin</button>
-  <div id="result"></div>
+  <h2>🔐 Stvor zkLogin Demo</h2>
+  <button id="login-btn" disabled>Sign in with zkLogin</button>
+  <div id="result">Loading Enoki library...</div>
 
   <script>
+    // Получаем элементы DOM
+    const loginBtn = document.getElementById('login-btn');
     const resultDiv = document.getElementById('result');
 
-    document.getElementById('login-btn').addEventListener('click', async () => {
+    // Проверяем, загрузилась ли библиотека Enoki
+    if (typeof Enoki === 'undefined') {
+      resultDiv.innerHTML = '❌ Failed to load Enoki library. Please check your internet connection or try again later.';
+      console.error('Enoki library not loaded');
+    } else {
+      loginBtn.disabled = false;
+      resultDiv.innerHTML = 'Ready to sign in with zkLogin';
+    }
+
+    // Обработчик клика по кнопке входа
+    loginBtn.addEventListener('click', async () => {
+      loginBtn.disabled = true;
+      resultDiv.innerHTML = '⏳ Signing in...';
+
       try {
+        // Инициализация Enoki с провайдером Google
         const enoki = Enoki.init({
-          appName: "Stvor Messenger",
-<<<<<<< HEAD
-          provider: "google", 
-=======
-          provider: "google", // можно заменить на github, twitch и др.
->>>>>>> 6894cb8 (fix: update zkLogin layout in index.html)
+          appName: 'Stvor Messenger',
+          provider: 'google', // Можно заменить на 'github', 'twitch' и др.
         });
 
+        // Выполняем вход через zkLogin
         const session = await enoki.signIn();
 
-        console.log("zkLogin success:", session);
+        // Логируем успех и отображаем информацию о пользователе
+        console.log('zkLogin success:', session);
         resultDiv.innerHTML = `
           ✅ Logged in as: <br><b>${session.userInfo.email}</b><br>
           Sui address: <code>${session.suiAddress}</code>
         `;
 
-<<<<<<< HEAD
-
-=======
-        // Далее можешь использовать session.suiAddress для отправки сообщений / транзакций
->>>>>>> 6894cb8 (fix: update zkLogin layout in index.html)
+        // Здесь можно добавить логику для отправки сообщений или транзакций с использованием session.suiAddress
       } catch (err) {
-        console.error("Login error:", err);
-        resultDiv.innerHTML = "❌ Login failed. See console for details.";
+        // Обрабатываем ошибки входа
+        console.error('Login error:', err);
+        resultDiv.innerHTML = `❌ Login failed: ${err.message || 'Unknown error. See console for details.'}`;
+      } finally {
+        loginBtn.disabled = false;
       }
     });
   </script>
