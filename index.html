@@ -4,8 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stv0r - Web3 Social Messenger</title>
-  <!-- ✅ Правильный скрипт Enoki -->
-  <script src="/enoki.bundle.js"></script>
+  <script src="https://unpkg.com/@mysten/enoki@latest/dist/browser/enoki.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      if (!window.enoki) {
+        console.error('❌ Enoki lib not loaded', window.enoki);
+        return;
+      }
+      console.log('✅ Enoki is available:', window.enoki);
+    });
+  </script>
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
