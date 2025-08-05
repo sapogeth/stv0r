@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stvor zkLogin Demo</title>
+  <title>Stv0к - web3 social messanger</title>
   <script src="https://cdn.jsdelivr.net/npm/@mysten/enoki@1.0.0-beta.10/dist/browser.umd.min.js"></script>
   <style>
     body {
@@ -26,7 +26,12 @@
       text-align: center;
     }
 
-    #login-btn {
+    .button-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
       padding: 12px 24px;
       background-color: #6366f1;
       border: none;
@@ -38,12 +43,12 @@
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    #login-btn:hover {
+    button:hover {
       background-color: #4f46e5;
       transform: translateY(-2px);
     }
 
-    #login-btn:disabled {
+    button:disabled {
       background-color: #4b5563;
       cursor: not-allowed;
     }
@@ -69,7 +74,7 @@
         font-size: 1.5rem;
       }
 
-      #login-btn {
+      button {
         padding: 10px 20px;
         font-size: 0.9rem;
       }
@@ -82,12 +87,16 @@
 </head>
 <body>
   <h2>🔐 Stvor zkLogin Demo</h2>
-  <button id="login-btn" disabled>Sign in with zkLogin</button>
+  <div class="button-container">
+    <button id="login-btn" disabled>Sign in with zkLogin</button>
+    <button id="register-btn" disabled>Register with zkLogin</button>
+  </div>
   <div id="result">Loading Enoki library...</div>
 
   <script>
     // Получаем элементы DOM
     const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
     const resultDiv = document.getElementById('result');
 
     // Проверяем, загрузилась ли библиотека Enoki
@@ -96,40 +105,50 @@
       console.error('Enoki library not loaded');
     } else {
       loginBtn.disabled = false;
-      resultDiv.innerHTML = 'Ready to sign in with zkLogin';
+      registerBtn.disabled = false;
+      resultDiv.innerHTML = 'Ready to sign in or register with zkLogin';
     }
 
-    // Обработчик клика по кнопке входа
-    loginBtn.addEventListener('click', async () => {
+    // Функция для инициализации Enoki и выполнения входа/регистрации
+    async function performZkLogin(isRegister = false) {
       loginBtn.disabled = true;
-      resultDiv.innerHTML = '⏳ Signing in...';
+      registerBtn.disabled = true;
+      resultDiv.innerHTML = `⏳ ${isRegister ? 'Registering' : 'Signing in'}...`;
 
       try {
-        // Инициализация Enoki с провайдером Google
+        // Инициализация Enoki
         const enoki = Enoki.init({
           appName: 'Stvor Messenger',
           provider: 'google', // Можно заменить на 'github', 'twitch' и др.
+          // clientId: 'YOUR_GOOGLE_CLIENT_ID' // Раскомментируйте и добавьте ваш Client ID
         });
 
         // Выполняем вход через zkLogin
         const session = await enoki.signIn();
 
-        // Логируем успех и отображаем информацию о пользователе
-        console.log('zkLogin success:', session);
+        // Логируем успех и отображаем информацию
+        console.log(`zkLogin ${isRegister ? 'registration' : 'login'} success:`, session);
         resultDiv.innerHTML = `
-          ✅ Logged in as: <br><b>${session.userInfo.email}</b><br>
+          ✅ ${isRegister ? 'Registered' : 'Logged in'} as: <br><b>${session.userInfo.email}</b><br>
           Sui address: <code>${session.suiAddress}</code>
         `;
 
-        // Здесь можно добавить логику для отправки сообщений или транзакций с использованием session.suiAddress
+        // Здесь можно добавить логику для отправки транзакций в SUI или сохранения данных
+        // Например, для регистрации можно сохранить session.suiAddress в ваш контракт на SUI
       } catch (err) {
-        // Обрабатываем ошибки входа
-        console.error('Login error:', err);
-        resultDiv.innerHTML = `❌ Login failed: ${err.message || 'Unknown error. See console for details.'}`;
+        console.error(`${isRegister ? 'Registration' : 'Login'} error:`, err);
+        resultDiv.innerHTML = `❌ ${isRegister ? 'Registration' : 'Login'} failed: ${err.message || 'Unknown error. See console for details.'}`;
       } finally {
         loginBtn.disabled = false;
+        registerBtn.disabled = false;
       }
-    });
+    }
+
+    // Обработчик для входа
+    loginBtn.addEventListener('click', () => performZkLogin(false));
+
+    // Обработчик для регистрации
+    registerBtn.addEventListener('click', () => performZkLogin(true));
   </script>
 </body>
 </html>
