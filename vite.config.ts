@@ -1,8 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/stv0r/',
-})
+  base: '/stv0r/', // Эта строка нужна для деплоя на GitHub Pages
+  server: {
+    proxy: {
+      '/sui-api': {
+        target: 'https://fullnode.testnet.sui.io/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sui-api/, ''),
+      },
+    },
+  },
+});
