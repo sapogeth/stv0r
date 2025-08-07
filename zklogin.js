@@ -25,13 +25,13 @@ export async function initiateOAuthLogin() {
     jwtRandomness
   ])).toString('base64url');
 
-  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${291907605245-f7d7jdeva4jbjtostvejcfoledlu4950.apps.googleusercontent.com}&redirect_uri=${redirectUri}&response_type=id_token&scope=openid%20profile%20email&nonce=${nonce}`;
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&scope=openid%20profile%20email&nonce=${nonce}`;
   window.location.href = authUrl;
 }
 
 // Обработка callback
 export async function handleOAuthCallback() {
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(window.location.hash.slice(1) || window.location.search);
   const jwt = urlParams.get('id_token');
   if (!jwt) throw new Error('JWT not found');
 

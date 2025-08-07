@@ -6,22 +6,19 @@
     <script type="module">
       window.onload = () => {
         try {
-          const params = new URLSearchParams(window.location.hash.slice(1));
-          const accessToken = params.get("access_token");
+          const params = new URLSearchParams(window.location.hash.slice(1) || window.location.search);
           const idToken = params.get("id_token");
           
           if (idToken) {
             sessionStorage.setItem("sui-zklogin-id-token", idToken);
             console.log("ID Token saved to session storage.");
-          } else if (accessToken) {
-            console.log("Access Token received, but no ID Token found.");
           } else {
-            console.error("Neither access_token nor id_token found.");
+            console.error("ID Token not found in redirect URL.");
           }
         } catch (error) {
           console.error("Error processing redirect:", error);
         } finally {
-          window.location.href = "/";
+          window.location.href = "/stv0r/"; // ✅ ИСПРАВЛЕНО
         }
       };
     </script>

@@ -1,191 +1,145 @@
-:root {
-  --primary-color: #1A237E;
-  --secondary-color: #E8EAF6;
-  --text-color: #212121;
-  --text-color-secondary: #757575;
-  --background-color: #F5F7FA;
-  --card-background: #FFFFFF;
-  --border-color: #BDBDBD;
-  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  --border-radius: 8px;
-  --font-family-primary: 'Roboto', sans-serif;
-  --font-family-secondary: 'Roboto Slab', serif;
-}
-
-body, html, #root {
+body {
   margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: var(--font-family-primary);
-  color: var(--text-color);
-  background-color: var(--background-color);
-  overflow: hidden;
-}
-
-.welcome-screen {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: var(--primary-color);
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #242424;
 }
 
-.welcome-card {
-  background-color: var(--card-background);
-  padding: 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
+#root {
+  max-width: 1280px; /* Уберите или измените это значение для полного растяжения */
+  margin: 0 auto;
+  padding: 0;
   text-align: center;
-  max-width: 400px;
   width: 100%;
 }
 
-.form-title {
-  font-family: var(--font-family-secondary);
-  font-size: 2.5em;
-  color: var(--primary-color);
-  margin-bottom: 10px;
-  font-weight: 700;
+.login-page-stvor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #0d0d0d;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
 }
 
-.form-subtitle {
-  color: var(--text-color-secondary);
-  margin-bottom: 30px;
+.login-header-stvor {
+  padding: 20px 0;
+  text-align: center;
 }
 
-.button-group {
+.logo-stvor {
+  font-size: 48px;
+  margin: 0;
+  color: #fff;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.login-main-stvor {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.login-form-container-stvor {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  margin: 20px;
+  border: 1px solid #333;
+}
+
+.form-inner-stvor {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-title-stvor {
+  font-size: 32px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.button-group-stvor {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.btn-academic {
+.btn-social-stvor {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px 20px;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  background-color: var(--card-background);
-  color: var(--text-color);
-  font-size: 1em;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-academic:hover {
-  background-color: var(--secondary-color);
-}
-
-.btn-academic img {
-  height: 20px;
-  width: 20px;
-}
-
-.chat-container {
-  display: flex;
-  height: 100vh;
-}
-
-.chat-sidebar {
-  width: 300px;
-  background-color: var(--card-background);
-  border-right: 1px solid var(--border-color);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-header {
-  font-family: var(--font-family-secondary);
-  font-size: 1.5em;
-  color: var(--primary-color);
-  margin-bottom: 20px;
-  font-weight: 700;
-}
-
-.chat-sidebar-account {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: var(--secondary-color);
-  border-radius: var(--border-radius);
-}
-
-.chat-sidebar-account p {
-  margin: 0;
-  font-size: 0.9em;
-  word-break: break-all;
-}
-
-.logout-btn {
-  background-color: var(--primary-color);
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: 600;
   color: #fff;
+  background-color: #333;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 
-.logout-btn:hover {
-  background-color: var(--primary-color);
+.btn-social-stvor:hover {
+  background-color: #555;
 }
 
-.chat-main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--background-color);
-  position: relative;
-}
-
-.kiosk-section {
-    padding: 20px;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--secondary-color);
-    margin-top: auto;
-}
-
-.kiosk-button {
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  font-weight: 500;
-  width: 100%;
-}
-
-.kiosk-button:hover {
-  background-color: var(--primary-color);
-}
-
-.kiosk-info {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: var(--card-background);
-    border-radius: var(--border-radius);
-    word-break: break-all;
+.social-icon-stvor {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+  filter: invert(1);
 }
 
 @media (max-width: 768px) {
-  .chat-container {
-    flex-direction: column;
+  .login-form-container-stvor {
+    padding: 30px;
   }
-  .chat-sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+  .logo-stvor {
+    font-size: 36px;
   }
-  .chat-main {
-    height: 100%;
+  .form-title-stvor {
+    font-size: 28px;
+  }
+  .btn-social-stvor {
+    font-size: 15px;
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form-container-stvor {
+    padding: 20px;
+  }
+  .logo-stvor {
+    font-size: 30px;
+  }
+  .form-title-stvor {
+    font-size: 24px;
+  }
+  .social-icon-stvor {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  .btn-social-stvor {
+    font-size: 14px;
+    padding: 10px 15px;
   }
 }

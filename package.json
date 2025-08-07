@@ -16,6 +16,8 @@
     "@mysten/enoki": "^0.11.5",
     "@mysten/kiosk": "^0.12.21",
     "@mysten/sui": "^1.37.1",
+    "@mysten/sui.js": "^0.54.1",
+    "@mysten/walrus": "^0.6.0",
     "@tanstack/react-query": "^5.84.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
