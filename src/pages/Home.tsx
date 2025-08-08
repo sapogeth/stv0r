@@ -3,7 +3,9 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../components/LogoutButton';
 import KioskComponent from '../components/KioskComponent';
+import UserProfile from '../components/UserProfile';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
+import { useUserNickname } from '../hooks/useUserNickname';
 import '../stvor.css';
 
 // Импортируем SetupPassword, если он все еще в отдельном файле
@@ -16,7 +18,11 @@ const Home = () => {
   const navigate = useNavigate();
   const [suiBalance, setSuiBalance] = useState<string>('Loading...');
   const [walBalance, setWalBalance] = useState<string>('Loading...');
+  const [activeTab, setActiveTab] = useState<'profile' | 'kiosk'>('profile');
   const address = currentAccount?.address;
+
+  // Используем хук для автоматического управления никнеймами
+  const { nickname, loading: nicknameLoading } = useUserNickname();
 
   useEffect(() => {
     const fetchBalances = async () => {
@@ -68,35 +74,73 @@ const Home = () => {
   return (
     <div className="chat-container">
       <div className="chat-sidebar">
-        <h1 className="chat-header">Academic Secure Chat</h1>
+        <h1 className="chat-header">STVOR</h1>
+        
+        {/* Отображение никнейма пользователя */}
+        <div className="user-info">
+          <div className="user-greeting">
+            <h3>👋 Привет, {nicknameLoading ? 'загрузка...' : (nickname || 'пользователь')}!</h3>
+          </div>
+          <div className="user-status">
+            🔒 Подключен безопасно через кошелек
+          </div>
+        </div>
+
         <div className="chat-sidebar-account">
-          <p>Logged in as:</p>
+          <p>Кошелек:</p>
           <p>
-            <strong>{currentAccount.address}</strong>
+            <strong>{currentAccount.address.slice(0, 8)}...{currentAccount.address.slice(-6)}</strong>
           </p>
         </div>
+
+        <div className="sidebar-tabs">
+          <button 
+            className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            Профиль
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'kiosk' ? 'active' : ''}`}
+            onClick={() => setActiveTab('kiosk')}
+          >
+            Kiosk
+          </button>
+        </div>
+
         <LogoutButton />
-        <div>
+        
+        <div className="sidebar-actions">
           {/* ✅ Здесь мы включаем компонент SetupPassword */}
           <SetupPassword /> 
 
-          <div style={{ marginTop: '10px' }}>
-            <p>Balance SUI: {suiBalance}</p>
-            <p>Balance WAL: {walBalance}</p>
-            <button onClick={refreshBalances} style={{ marginTop: '5px' }}>
-              Refresh Balances
+          <div className="balance-info">
+            <p>Баланс SUI: {suiBalance}</p>
+            <p>Баланс WAL: {walBalance}</p>
+            <button onClick={refreshBalances} className="refresh-btn">
+              Обновить балансы
             </button>
           </div>
-          <button onClick={goToMarketplace} style={{ marginTop: '10px' }} disabled={!currentAccount}>
-            Go to the marketplace
+          
+          <button onClick={goToMarketplace} className="marketplace-btn" disabled={!currentAccount}>
+            Перейти в маркетплейс
           </button>
         </div>
       </div>
+      
       <div className="chat-main">
-        <div className="kiosk-section">
-          <h2>Sui Kiosk</h2>
-          <KioskComponent />
-        </div>
+        {activeTab === 'profile' && (
+          <div className="profile-section">
+            <UserProfile />
+          </div>
+        )}
+        
+        {activeTab === 'kiosk' && (
+          <div className="kiosk-section">
+            <h2>Sui Kiosk</h2>
+            <KioskComponent />
+          </div>
+        )}
       </div>
     </div>
   );

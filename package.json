@@ -2,7 +2,7 @@
   "name": "stvor1",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "module", 
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,7 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@mysten/dapp-kit": "^0.16.16",
+    "@mysten/dapp-kit": "^0.17.2",
     "@mysten/enoki": "^0.11.5",
     "@mysten/kiosk": "^0.12.21",
     "@mysten/sui": "^1.37.1",

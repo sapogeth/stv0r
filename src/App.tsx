@@ -11,6 +11,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import LoginForm from './components/LoginForm';
 import Register from './components/Register';
+import Marketplace from './components/Marketplace';
 // import { SetupPassword } from './components/SetupPassword'; // ✅ Больше не импортируем здесь
 import { ProtectedPage } from './components/ProtectedPage';
 import React from 'react';
@@ -53,7 +54,8 @@ function App() {
               <Route path="/" element={<AuthGuard><Home /></AuthGuard>} /> 
               {/* ✅ Маршрут /setup удален */}
               {/* <Route path="/setup" element={<AuthGuard><SetupPassword /></AuthGuard>} /> */}
-              <Route path="/marketplace" element={<AuthGuard><ProtectedPage /></AuthGuard>} />
+              <Route path="/marketplace" element={<AuthGuard><Marketplace /></AuthGuard>} />
+              <Route path="/protected" element={<AuthGuard><ProtectedPage /></AuthGuard>} />
             </Routes>
           </BrowserRouter>
         </WalletProvider>
