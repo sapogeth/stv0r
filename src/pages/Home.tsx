@@ -7,6 +7,7 @@ import UserProfile from '../components/UserProfile';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
 import { useUserNickname } from '../hooks/useUserNickname';
 import '../stvor.css';
+import '../styles/nickname.css';
 
 // Импортируем SetupPassword, если он все еще в отдельном файле
 import { SetupPassword } from '../components/SetupPassword'; 
@@ -79,11 +80,19 @@ const Home = () => {
         {/* Отображение никнейма пользователя */}
         <div className="user-info">
           <div className="user-greeting">
-            <h3>👋 Привет, {nicknameLoading ? 'загрузка...' : (nickname || 'пользователь')}!</h3>
+            <h3>👋 Привет, @{nicknameLoading ? 'загрузка...' : (nickname || 'пользователь')}!</h3>
+            {!nicknameLoading && nickname && (
+              <p className="nickname-status">Ваш уникальный никнейм</p>
+            )}
           </div>
           <div className="user-status">
             🔒 Подключен безопасно через кошелек
           </div>
+          {!nicknameLoading && !nickname && (
+            <div className="nickname-warning">
+              ⚠️ Никнейм не найден. Обновите страницу.
+            </div>
+          )}
         </div>
 
         <div className="chat-sidebar-account">

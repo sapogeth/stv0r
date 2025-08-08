@@ -1,11 +1,6 @@
 import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-
-// Конфигурация Sui Kiosk
-const SUI_NETWORK = 'testnet';
-// Это Package ID вашего контракта, не стандартный 0x2
-const KIOSK_PACKAGE_ID = '0x33c4f923e648c668b5a0346c764e4cb31a615714c5b1612470129210214a4cb3';
-const NICKNAME_NFT_TYPE = '0x33c4f923e648c668b5a0346c764e4cb31a615714c5b1612470129210214a4cb3::nickname_nft::NicknameNFT';
+import { CONTRACTS } from '../config/contracts'; 
 
 export interface KioskInfo {
   id: string;
@@ -45,9 +40,9 @@ const userKioskCaps: Record<string, string> = {}; // ownerAddress -> kioskCapId
 export async function createKiosk(ownerAddress: string): Promise<TransactionBlock> {
   const tx = new TransactionBlock();
   
-  // Создаем новый Kiosk
+  // Создаем новый Kiosk используя стандартный Sui Framework
   const [kiosk, kioskCap] = tx.moveCall({
-    target: `${KIOSK_PACKAGE_ID}::kiosk::new`,
+    target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::new`,
     arguments: [],
   });
   
@@ -73,6 +68,17 @@ export function getKioskIds(ownerAddress: string): { kioskId: string; kioskCapId
 }
 
 /**
+ * Сохраняет ID Kiosk и KioskOwnerCap для пользователя
+ * @param ownerAddress адрес владельца
+ * @param kioskId ID Kiosk
+ * @param kioskCapId ID KioskOwnerCap
+ */
+export function saveKioskIds(ownerAddress: string, kioskId: string, kioskCapId: string): void {
+  userKiosks[ownerAddress] = kioskId;
+  userKioskCaps[ownerAddress] = kioskCapId;
+}
+
+/**
  * Размещает NFT никнейм в Kiosk
  * @param kioskId ID Kiosk
  * @param kioskCapId ID KioskOwnerCap
@@ -87,9 +93,14 @@ export async function placeNFTInKiosk(
   tx: TransactionBlock
 ): Promise<void> {
   try {
+    // Проверяем, что контракты развернуты
+    if (!CONTRACTS.areContractsDeployed()) {
+      throw new Error('Контракты NFT не развернуты. Используем стандартный Kiosk.');
+    }
+
     tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::place`,
-      typeArguments: [NICKNAME_NFT_TYPE],
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::place`,
+      typeArguments: [CONTRACTS.getNicknameNFTType()],
       arguments: [
         tx.object(kioskId),
         tx.object(kioskCapId),
@@ -120,8 +131,8 @@ export async function listNFTForSale(
 ): Promise<void> {
   try {
     tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::list`,
-      typeArguments: [NICKNAME_NFT_TYPE],
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::list`,
+      typeArguments: [CONTRACTS.getNicknameNFTType()],
       arguments: [
         tx.object(kioskId),
         tx.object(kioskCapId),
@@ -151,8 +162,8 @@ export async function purchaseNFTFromKiosk(
 ): Promise<string> {
   try {
     const [nft, transferRequest] = tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::purchase`,
-      typeArguments: [NICKNAME_NFT_TYPE],
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::purchase`,
+      typeArguments: [CONTRACTS.getNicknameNFTType()],
       arguments: [
         tx.object(kioskId),
         tx.pure.id(nftId),
@@ -161,8 +172,8 @@ export async function purchaseNFTFromKiosk(
     });
     
     tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::confirm_request`,
-      typeArguments: [NICKNAME_NFT_TYPE],
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::confirm_request`,
+      typeArguments: [CONTRACTS.getNicknameNFTType()],
       arguments: [
         tx.object(kioskId),
         transferRequest,
@@ -194,8 +205,8 @@ export async function delistNFT(
 ): Promise<void> {
   try {
     tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::delist`,
-      typeArguments: [NICKNAME_NFT_TYPE],
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::delist`,
+      typeArguments: [CONTRACTS.getNicknameNFTType()],
       arguments: [
         tx.object(kioskId),
         tx.object(kioskCapId),
@@ -224,8 +235,8 @@ export async function takeNFTFromKiosk(
 ): Promise<void> {
   try {
     const nft = tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::take`,
-      typeArguments: [NICKNAME_NFT_TYPE],
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::take`,
+      typeArguments: [CONTRACTS.getNicknameNFTType()],
       arguments: [
         tx.object(kioskId),
         tx.object(kioskCapId),
@@ -247,7 +258,7 @@ export async function takeNFTFromKiosk(
  */
 export async function getKioskInfo(kioskId: string): Promise<KioskInfo | null> {
   try {
-    const client = new SuiClient({ url: `https://fullnode.${SUI_NETWORK}.sui.io:443` });
+    const client = new SuiClient({ url: CONTRACTS.RPC_URL });
     
     const kioskObject = await client.getObject({
       id: kioskId,
@@ -281,7 +292,7 @@ export async function getKioskInfo(kioskId: string): Promise<KioskInfo | null> {
  */
 export async function getKioskItems(kioskId: string): Promise<KioskItem[]> {
   try {
-    const client = new SuiClient({ url: `https://fullnode.${SUI_NETWORK}.sui.io:443` });
+    const client = new SuiClient({ url: CONTRACTS.RPC_URL });
     
     const dynamicFields = await client.getDynamicFields({
       parentId: kioskId,
@@ -323,7 +334,7 @@ export async function getKioskItems(kioskId: string): Promise<KioskItem[]> {
  */
 export async function getKioskListings(kioskId: string): Promise<KioskListing[]> {
   try {
-    const client = new SuiClient({ url: `https://fullnode.${SUI_NETWORK}.sui.io:443` });
+    const client = new SuiClient({ url: CONTRACTS.RPC_URL });
     
     // Реальная реализация требует запроса к событиям Kiosk
     return [];
@@ -347,7 +358,7 @@ export async function withdrawKioskProfits(
 ): Promise<void> {
   try {
     const coin = tx.moveCall({
-      target: `${KIOSK_PACKAGE_ID}::kiosk::withdraw`,
+      target: `${CONTRACTS.KIOSK_PACKAGE_ID}::kiosk::withdraw`,
       arguments: [
         tx.object(kioskId),
         tx.object(kioskCapId),
@@ -361,3 +372,4 @@ export async function withdrawKioskProfits(
     throw error;
   }
 }
+

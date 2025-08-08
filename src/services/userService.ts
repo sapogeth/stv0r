@@ -137,7 +137,8 @@ export async function convertNicknameToNFT(userId: string, tokenId: string): Pro
   if (!user) return false;
   
   user.isNicknameNFT = true;
-  user.nicknameTokenId = tokenId;
+  // Добавляем tokenId в объект пользователя
+  (user as any).nicknameTokenId = tokenId;
   user.updatedAt = new Date();
   users.set(userId, user);
   
