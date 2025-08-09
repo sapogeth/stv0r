@@ -1,4 +1,4 @@
-# # stv0r: Decentralized Nickname Management and Trading Platform on Sui
+## Stv0r: Decentralized Nickname Management and Trading Platform on Sui
 
 ## Overview
 
