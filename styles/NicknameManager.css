@@ -1,0 +1,244 @@
+/* src/styles/NicknameManager.css */
+
+.nickname-manager {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.nickname-display h3 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.nickname-info {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.nickname-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nft-badge {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nickname-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.edit-button, .nft-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-button {
+  background: #3498db;
+  color: white;
+}
+
+.edit-button:hover:not(:disabled) {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.nft-button {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  color: white;
+}
+
+.nft-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.nickname-editor {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.custom-nickname {
+  margin-bottom: 25px;
+}
+
+.custom-nickname label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.custom-nickname input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  transition: border-color 0.3s ease;
+}
+
+.custom-nickname input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.nickname-suggestions h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.suggestion-button {
+  padding: 10px 15px;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.suggestion-button:hover {
+  border-color: #3498db;
+  background: #f8f9fa;
+}
+
+.suggestion-button.selected {
+  border-color: #3498db;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.generate-more {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #28a745;
+  background: white;
+  color: #28a745;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.generate-more:hover:not(:disabled) {
+  background: #28a745;
+  color: white;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.save-button, .cancel-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-button {
+  background: #27ae60;
+  color: white;
+}
+
+.save-button:hover:not(:disabled) {
+  background: #219a52;
+  transform: translateY(-2px);
+}
+
+.save-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background: #e74c3c;
+  color: white;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .nickname-manager {
+    padding: 15px;
+  }
+  
+  .nickname-info, .nickname-editor {
+    padding: 20px;
+  }
+  
+  .nickname-value {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .nickname-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .edit-button, .nft-button {
+    width: 200px;
+  }
+  
+  .suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .editor-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .save-button, .cancel-button {
+    width: 200px;
+  }
+}
+

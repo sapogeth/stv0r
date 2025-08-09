@@ -1,0 +1,69 @@
+import {
+  createNetworkConfig,
+  SuiClientProvider,
+  WalletProvider,
+  useCurrentAccount,
+} from '@mysten/dapp-kit';
+//import './App.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import RegisterEnokiWallets from './components/RegisterEnokiWallets';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import LoginForm from './components/LoginForm';
+import Register from './components/Register';
+import Marketplace from './components/marketplace';
+import VotingPage from './components/VotingPage';
+// import { SetupPassword } from './components/SetupPassword'; // ✅ Больше не импортируем здесь
+import { ProtectedPage } from './components/ProtectedPage';
+import React from 'react';
+
+const { networkConfig } = createNetworkConfig({
+  testnet: { url: 'http://localhost:5173/sui-api' },
+  mainnet: { url: 'http://localhost:5173/sui-api' },
+});
+
+const queryClient = new QueryClient();
+
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const account = useCurrentAccount();
+  const [hasChecked, setHasChecked] = React.useState(false);
+
+  React.useEffect(() => {
+    if (account !== undefined) {
+      setHasChecked(true);
+    }
+  }, [account]);
+
+  if (!hasChecked) {
+    return null;
+  }
+
+  return account ? children : <Navigate to="/login" />;
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+        <RegisterEnokiWallets />
+        <WalletProvider autoConnect>
+          <BrowserRouter basename="/stv0r/">
+            <Routes>
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<Register />} />
+              {/* ✅ Home теперь будет содержать SetupPassword */}
+              <Route path="/" element={<AuthGuard><Home /></AuthGuard>} /> 
+              {/* ✅ Маршрут /setup удален */}
+              {/* <Route path="/setup" element={<AuthGuard><SetupPassword /></AuthGuard>} /> */}
+              <Route path="/marketplace" element={<AuthGuard><Marketplace /></AuthGuard>} />
+              <Route path="/protected" element={<AuthGuard><ProtectedPage /></AuthGuard>} />
+              <Route path="/voting" element={<VotingPage />} />
+            </Routes>
+          </BrowserRouter>
+        </WalletProvider>
+      </SuiClientProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
