@@ -96,6 +96,10 @@ We welcome contributions to stv0r. If you have ideas, suggestions, or want to re
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
 
+## White Paper
+
+[White Paper](https://github.com/sapogeth/stv0r/blob/main/Stv0r_white_paper.pdf)
+
 ## References
 
 *   [Sui Documentation](https://docs.sui.io/)
