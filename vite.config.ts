@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/stv0r/', // Эта строка нужна для деплоя на GitHub Pages
+  base: '/stv0r/',
   server: {
     proxy: {
       '/sui-api': {
@@ -12,5 +12,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/sui-api/, ''),
       },
     },
+  },
+  optimizeDeps: {
+    // Добавьте проблемную зависимость сюда
+    exclude: ['sui-client'], 
   },
 });

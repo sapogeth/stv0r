@@ -2,7 +2,7 @@
   "name": "stvor1",
   "private": true,
   "version": "0.0.0",
-  "type": "module", 
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -19,6 +19,8 @@
     "@mysten/sui.js": "^0.54.1",
     "@mysten/walrus": "^0.6.0",
     "@tanstack/react-query": "^5.84.1",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.539.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-helmet": "^6.1.0",
