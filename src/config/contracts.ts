@@ -1,48 +1,48 @@
 // src/config/contracts.ts
 
 export const CONTRACTS = {
-  // Эти ID нужно будет обновить после развертывания контрактов
-  NICKNAME_NFT_PACKAGE_ID: '0x0', // Заменить после развертывания
-  NICKNAME_REGISTRY_ID: '0x0', // Заменить после развертывания
-  ADMIN_CAP_ID: '0x0', // Заменить после развертывания
+  // These IDs will need to be updated after deploying the contracts
+  NICKNAME_NFT_PACKAGE_ID: '0x0', // Replace after deployment
+  NICKNAME_REGISTRY_ID: '0x0', // Replace after deployment
+  ADMIN_CAP_ID: '0x0', // Replace after deployment
   
-  // Стандартные Sui контракты
+  // Standard Sui contracts
   SUI_FRAMEWORK_PACKAGE_ID: '0x2',
   KIOSK_PACKAGE_ID: '0x2',
   
-  // Walrus конфигурация
+  // Walrus configuration
   WALRUS_PUBLISHER_URL: 'https://publisher-devnet.walrus.space',
   WALRUS_AGGREGATOR_URL: 'https://aggregator-devnet.walrus.space',
   
-  // Seal конфигурация (заменить после развертывания)
+  // Seal configuration (replace after deployment)
   SEAL_PACKAGE_ID: '0x0',
   
-  // Сеть
+  // Network
   NETWORK: 'testnet' as const,
   RPC_URL: 'https://fullnode.testnet.sui.io:443',
   
-  // Цены
-  MINT_PRICE: 100_000_000, // 0.1 SUI в MIST
-  TRANSACTION_SPONSORSHIP_LIMIT: 5, // Количество бесплатных транзакций
+  // Prices
+  MINT_PRICE: 100_000_000, // 0.1 SUI in MIST
+  TRANSACTION_SPONSORSHIP_LIMIT: 5, // Number of free transactions
 
-  // Проверка, развернуты ли контракты
+  // Check if contracts are deployed
   areContractsDeployed(): boolean {
     return this.NICKNAME_NFT_PACKAGE_ID !== '0x0' && 
            this.NICKNAME_REGISTRY_ID !== '0x0';
   },
   
-  // ✨ Вот исправленная часть: вычисляем тип после определения CONTRACTS
+  // ✨ Here's the corrected part: calculate the type after defining CONTRACTS
   getNicknameNFTType(): string {
     return `${this.NICKNAME_NFT_PACKAGE_ID}::nickname_nft::NicknameNFT`;
   }
 };
 
-// Функция для обновления ID контрактов после развертывания
+// Function to update contract IDs after deployment
 export function updateContractIds(updates: Partial<typeof CONTRACTS>) {
   Object.assign(CONTRACTS, updates);
 }
 
-// Валидация конфигурации
+// Configuration validation
 export function validateContractConfig(): boolean {
   const requiredFields = [
     'NICKNAME_NFT_PACKAGE_ID',

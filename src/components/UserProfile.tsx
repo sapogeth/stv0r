@@ -6,23 +6,23 @@ import NicknameManager from './NicknameManager';
 import '../styles/UserProfile.css';
 
 const UserProfile: React.FC = () => {
-  const { 
-    user, 
-    nickname, 
-    loading, 
-    error, 
-    updateNickname, 
-    refreshUser, 
-    isConnected, 
-    walletAddress 
+  const {
+    user,
+    nickname,
+    loading,
+    error,
+    updateNickname,
+    refreshUser,
+    isConnected,
+    walletAddress
   } = useUserNickname();
 
   if (!isConnected) {
     return (
       <div className="user-profile">
         <div className="profile-message">
-          <h3>Подключите кошелек</h3>
-          <p>Для использования профиля необходимо подключить кошелек</p>
+          <h3>Connect your wallet</h3>
+          <p>To use the profile, you need to connect your wallet</p>
         </div>
       </div>
     );
@@ -32,8 +32,8 @@ const UserProfile: React.FC = () => {
     return (
       <div className="user-profile">
         <div className="profile-loading">
-          <h3>Инициализация профиля...</h3>
-          <p>Создаем ваш уникальный никнейм</p>
+          <h3>Initializing profile...</h3>
+          <p>Creating your unique nickname</p>
         </div>
       </div>
     );
@@ -43,10 +43,10 @@ const UserProfile: React.FC = () => {
     return (
       <div className="user-profile">
         <div className="profile-error">
-          <h3>Ошибка инициализации</h3>
+          <h3>Initialization Error</h3>
           <p>{error}</p>
           <button onClick={refreshUser} className="retry-button">
-            Попробовать снова
+            Try again
           </button>
         </div>
       </div>
@@ -56,13 +56,13 @@ const UserProfile: React.FC = () => {
   return (
     <div className="user-profile">
       <div className="profile-header">
-        <h2>Профиль пользователя</h2>
-        {loading && <span className="loading-indicator">Обновление...</span>}
+        <h2>User Profile</h2>
+        {loading && <span className="loading-indicator">Updating...</span>}
       </div>
 
       <div className="profile-info">
         <div className="wallet-info">
-          <h3>Кошелек</h3>
+          <h3>Wallet</h3>
           <div className="wallet-address">
             {walletAddress ? (
               <>
@@ -74,7 +74,7 @@ const UserProfile: React.FC = () => {
                 </span>
               </>
             ) : (
-              'Не подключен'
+              'Not connected'
             )}
           </div>
         </div>
@@ -86,11 +86,11 @@ const UserProfile: React.FC = () => {
               <span>{user.email}</span>
             </div>
             <div className="detail-item">
-              <label>Дата регистрации:</label>
+              <label>Registration Date:</label>
               <span>{user.createdAt.toLocaleDateString()}</span>
             </div>
             <div className="detail-item">
-              <label>Последнее обновление:</label>
+              <label>Last Updated:</label>
               <span>{user.updatedAt.toLocaleDateString()}</span>
             </div>
           </div>
@@ -98,7 +98,7 @@ const UserProfile: React.FC = () => {
       </div>
 
       <div className="nickname-section">
-        <NicknameManager 
+        <NicknameManager
           currentNickname={nickname}
           onNicknameUpdate={updateNickname}
         />
@@ -108,14 +108,14 @@ const UserProfile: React.FC = () => {
         <div className="profile-error-message">
           <p>⚠️ {error}</p>
           <button onClick={refreshUser} className="refresh-button">
-            Обновить данные
+            Refresh Data
           </button>
         </div>
       )}
 
       <div className="profile-actions">
         <button onClick={refreshUser} className="refresh-button" disabled={loading}>
-          {loading ? 'Обновление...' : 'Обновить профиль'}
+          {loading ? 'Updating...' : 'Refresh Profile'}
         </button>
       </div>
     </div>
@@ -123,4 +123,3 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
-

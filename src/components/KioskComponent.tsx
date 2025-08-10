@@ -9,29 +9,29 @@ export default function RegisterEnokiWallets() {
         if (!isEnokiNetwork(network)) return;
 
         const { unregister } = registerEnokiWallets({
-            // Ваш публичный API ключ Enoki
+            // Your public Enoki API key
             apiKey: import.meta.env.VITE_ENOKI_API_KEY,
             
-            // Настройка провайдеров
+            // Provider configuration
             providers: {
                 google: {
-                    // Используем ваш Client ID из Google Cloud Console
+                    // Use your Client ID from the Google Cloud Console
                     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
                 },
                 facebook: {
-                    // Используем ваш Client ID из Facebook Developer
+                    // Use your Client ID from Facebook Developer
                     clientId: import.meta.env.VITE_FACEBOOK_CLIENT_ID,
                 },
-                // Если нужны другие провайдеры, их можно добавить здесь
+                // If other providers are needed, they can be added here
             },
             
             client,
             network,
 
-            // ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ
-            // Явно указываем URL для перенаправления.
-            // Это решает ошибку `redirect_uri_mismatch`
-            // Важно: этот URL должен точно совпадать с тем, что в Google Cloud Console.
+            // ✅ CRITICAL FIX
+            // Explicitly specify the redirect URL.
+            // This resolves the `redirect_uri_mismatch` error.
+            // Important: this URL must exactly match the one in the Google Cloud Console.
             redirectUrl: import.meta.env.VITE_REDIRECT_URI,
         });
 

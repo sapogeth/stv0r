@@ -4,14 +4,15 @@ import {
   WalletProvider,
   useCurrentAccount,
 } from '@mysten/dapp-kit';
-import './App.css';
+//import './App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import RegisterEnokiWallets from './components/RegisterEnokiWallets';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import LoginForm from './components/LoginForm';
 import Register from './components/Register';
-import Marketplace from './components/Marketplace';
+import Marketplace from './components/marketplace';
+import VotingPage from './components/VotingPage';
 // import { SetupPassword } from './components/SetupPassword'; // ✅ Больше не импортируем здесь
 import { ProtectedPage } from './components/ProtectedPage';
 import React from 'react';
@@ -56,6 +57,7 @@ function App() {
               {/* <Route path="/setup" element={<AuthGuard><SetupPassword /></AuthGuard>} /> */}
               <Route path="/marketplace" element={<AuthGuard><Marketplace /></AuthGuard>} />
               <Route path="/protected" element={<AuthGuard><ProtectedPage /></AuthGuard>} />
+              <Route path="/voting" element={<VotingPage />} />
             </Routes>
           </BrowserRouter>
         </WalletProvider>

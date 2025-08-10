@@ -53,7 +53,7 @@ const ChatInterface: React.FC = () => {
       const userChats = getUserChats(currentAccount.address);
       setChats(userChats);
     } catch (error) {
-      console.error('Ошибка загрузки чатов:', error);
+      console.error('Error loading chats:', error);
     }
   };
 
@@ -62,9 +62,9 @@ const ChatInterface: React.FC = () => {
     
     try {
       const chatMessages = getChatMessages(selectedChat.id, 50, 0);
-      setMessages(chatMessages.reverse()); // Показываем в хронологическом порядке
+      setMessages(chatMessages.reverse()); // Display in chronological order
     } catch (error) {
-      console.error('Ошибка загрузки сообщений:', error);
+      console.error('Error loading messages:', error);
     }
   };
 
@@ -75,7 +75,7 @@ const ChatInterface: React.FC = () => {
       const unread = getTotalUnreadCount(currentAccount.address);
       setTotalUnread(unread);
     } catch (error) {
-      console.error('Ошибка загрузки непрочитанных:', error);
+      console.error('Error loading unread count:', error);
     }
   };
 
@@ -85,9 +85,9 @@ const ChatInterface: React.FC = () => {
     try {
       await markMessagesAsRead(selectedChat.id, currentAccount.address);
       loadUnreadCount();
-      loadChats(); // Обновляем список чатов для обновления счетчиков
+      loadChats(); // Update chat list to refresh counters
     } catch (error) {
-      console.error('Ошибка отметки как прочитанное:', error);
+      console.error('Error marking as read:', error);
     }
   };
 
@@ -96,13 +96,13 @@ const ChatInterface: React.FC = () => {
     
     setLoading(true);
     try {
-      // Находим адрес получателя
+      // Find the recipient's address
       const recipientAddress = selectedChat.participants.find(
         addr => addr !== currentAccount.address
       );
       
       if (!recipientAddress) {
-        throw new Error('Получатель не найден');
+        throw new Error('Recipient not found');
       }
 
       const messageData: NewMessage = {
@@ -118,11 +118,11 @@ const ChatInterface: React.FC = () => {
       loadChats();
       loadUnreadCount();
       
-      // Фокусируемся обратно на поле ввода
+      // Focus back on the input field
       messageInputRef.current?.focus();
     } catch (error) {
-      console.error('Ошибка отправки сообщения:', error);
-      alert('Ошибка при отправке сообщения');
+      console.error('Error sending message:', error);
+      alert('Error sending message');
     } finally {
       setLoading(false);
     }
@@ -144,12 +144,12 @@ const ChatInterface: React.FC = () => {
     const messageDate = new Date(timestamp);
     
     if (now.toDateString() === messageDate.toDateString()) {
-      return messageDate.toLocaleTimeString('ru-RU', { 
+      return messageDate.toLocaleTimeString('en-US', { 
         hour: '2-digit', 
         minute: '2-digit' 
       });
     } else {
-      return messageDate.toLocaleDateString('ru-RU', {
+      return messageDate.toLocaleDateString('en-US', {
         day: '2-digit',
         month: '2-digit',
         hour: '2-digit',
@@ -182,8 +182,8 @@ const ChatInterface: React.FC = () => {
     return (
       <div className="chat-interface">
         <div className="chat-login-prompt">
-          <h3>Подключите кошелек</h3>
-          <p>Для использования чата необходимо подключить кошелек</p>
+          <h3>Connect your wallet</h3>
+          <p>To use the chat, you need to connect your wallet</p>
         </div>
       </div>
     );
@@ -194,7 +194,7 @@ const ChatInterface: React.FC = () => {
       <div className="chat-sidebar">
         <div className="chat-header">
           <h3>
-            Чаты 
+            Chats 
             {totalUnread > 0 && (
               <span className="unread-badge">{totalUnread}</span>
             )}
@@ -203,14 +203,14 @@ const ChatInterface: React.FC = () => {
             className="new-chat-btn"
             onClick={() => setShowUserSearch(!showUserSearch)}
           >
-            ➕ Новый чат
+            ➕ New Chat
           </button>
         </div>
 
         {showUserSearch && (
           <div className="user-search-container">
             <UserSearch
-              placeholder="Найти пользователя для чата..."
+              placeholder="Find a user to chat with..."
               onChatStart={handleChatStart}
               showStartChatButton={true}
             />
@@ -220,8 +220,8 @@ const ChatInterface: React.FC = () => {
         <div className="chats-list">
           {chats.length === 0 ? (
             <div className="no-chats">
-              <p>У вас пока нет чатов</p>
-              <p>Найдите пользователя, чтобы начать общение</p>
+              <p>You have no chats yet</p>
+              <p>Find a user to start a conversation</p>
             </div>
           ) : (
             chats.map((chat) => {
@@ -275,8 +275,8 @@ const ChatInterface: React.FC = () => {
             <div className="messages-container">
               {messages.length === 0 ? (
                 <div className="no-messages">
-                  <p>Начните разговор!</p>
-                  <p>Отправьте первое сообщение @{getOtherParticipantNickname(selectedChat)}</p>
+                  <p>Start the conversation!</p>
+                  <p>Send the first message to @{getOtherParticipantNickname(selectedChat)}</p>
                 </div>
               ) : (
                 messages.map((message) => (
@@ -311,7 +311,7 @@ const ChatInterface: React.FC = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Введите сообщение..."
+                placeholder="Type a message..."
                 className="message-input"
                 rows={1}
                 disabled={loading}
@@ -327,8 +327,8 @@ const ChatInterface: React.FC = () => {
           </>
         ) : (
           <div className="no-chat-selected">
-            <h3>Выберите чат</h3>
-            <p>Выберите существующий чат или найдите пользователя для начала общения</p>
+            <h3>Select a chat</h3>
+            <p>Select an existing chat or find a user to start a conversation</p>
           </div>
         )}
       </div>

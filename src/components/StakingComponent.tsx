@@ -50,7 +50,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
       setUserStakes(stakes);
       setWalBalance(balances.wal);
     } catch (error) {
-      console.error('Ошибка загрузки данных пользователя:', error);
+      console.error('Error loading user data:', error);
     }
   };
 
@@ -68,13 +68,13 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
         setSelectedPool(pools[0].poolId);
       }
     } catch (error) {
-      console.error('Ошибка загрузки общих данных:', error);
+      console.error('Error loading general data:', error);
     }
   };
 
   const handleStake = async () => {
     if (!account?.address || !stakeAmount || parseFloat(stakeAmount) <= 0) {
-      alert('Введите корректную сумму для стейкинга');
+      alert('Enter a valid amount to stake');
       return;
     }
 
@@ -83,7 +83,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
       const result = await createStake(account.address, parseFloat(stakeAmount));
 
       if (result.success) {
-        alert(`Стейк создан успешно! ID: ${result.stakeId}`);
+        alert(`Stake created successfully! ID: ${result.stakeId}`);
         setStakeAmount('');
         await loadUserData();
         await loadGeneralData();
@@ -92,11 +92,11 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
           onStakeComplete(result.txDigest);
         }
       } else {
-        alert(`Ошибка создания стейка: ${result.error}`);
+        alert(`Error creating stake: ${result.error}`);
       }
     } catch (error) {
-      console.error('Ошибка при создании стейка:', error);
-      alert('Произошла ошибка при создании стейка');
+      console.error('Error while creating stake:', error);
+      alert('An error occurred while creating the stake');
     } finally {
       setLoading(false);
     }
@@ -110,15 +110,15 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
       const result = await unstake(account.address, stakeId);
 
       if (result.success) {
-        alert('Стейк успешно завершен!');
+        alert('Stake successfully ended!');
         await loadUserData();
         await loadGeneralData();
       } else {
-        alert(`Ошибка завершения стейка: ${result.error}`);
+        alert(`Error ending stake: ${result.error}`);
       }
     } catch (error) {
-      console.error('Ошибка при завершении стейка:', error);
-      alert('Произошла ошибка при завершении стейка');
+      console.error('Error while ending stake:', error);
+      alert('An error occurred while ending the stake');
     } finally {
       setLoading(false);
     }
@@ -132,15 +132,15 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
       const result = await claimRewards(account.address, stakeId);
 
       if (result.success) {
-        alert('Награды успешно собраны!');
+        alert('Rewards claimed successfully!');
         await loadUserData();
         await loadGeneralData();
       } else {
-        alert(`Ошибка сбора наград: ${result.error}`);
+        alert(`Error claiming rewards: ${result.error}`);
       }
     } catch (error) {
-      console.error('Ошибка при сборе наград:', error);
-      alert('Произошла ошибка при сборе наград');
+      console.error('Error while claiming rewards:', error);
+      alert('An error occurred while claiming rewards');
     } finally {
       setLoading(false);
     }
@@ -151,7 +151,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('ru-RU', {
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -174,7 +174,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
     return (
       <div className="staking-component">
         <div className="connect-wallet-message">
-          <p>Подключите кошелек для использования стейкинга</p>
+          <p>Connect your wallet to use staking</p>
         </div>
       </div>
     );
@@ -183,9 +183,9 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
   return (
     <div className="staking-component">
       <div className="staking-header">
-        <h2>Стейкинг WAL</h2>
+        <h2>WAL Staking</h2>
         <div className="balance-info">
-          <span>Доступно: {walBalance.toFixed(4)} WAL</span>
+          <span>Available: {walBalance.toFixed(4)} WAL</span>
         </div>
       </div>
 
@@ -194,19 +194,19 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
           onClick={() => setActiveTab('stake')} 
           className={activeTab === 'stake' ? 'active' : ''}
         >
-          Создать стейк
+          Create Stake
         </button>
         <button 
           onClick={() => setActiveTab('my-stakes')} 
           className={activeTab === 'my-stakes' ? 'active' : ''}
         >
-          Мои стейки ({userStakes.length})
+          My Stakes ({userStakes.length})
         </button>
         <button 
           onClick={() => setActiveTab('stats')} 
           className={activeTab === 'stats' ? 'active' : ''}
         >
-          Статистика
+          Statistics
         </button>
       </div>
 
@@ -214,7 +214,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
         <div className="tab-content">
           <div className="stake-form">
             <div className="form-group">
-              <label>Сумма для стейкинга:</label>
+              <label>Amount to stake:</label>
               <div className="input-row">
                 <input
                   type="number"
@@ -232,7 +232,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
 
             {availablePools.length > 0 && (
               <div className="form-group">
-                <label>Пул для стейкинга:</label>
+                <label>Staking Pool:</label>
                 <select
                   value={selectedPool}
                   onChange={(e) => setSelectedPool(e.target.value)}
@@ -249,18 +249,18 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
 
             {stakeAmount && parseFloat(stakeAmount) > 0 && (
               <div className="potential-rewards">
-                <h4>Потенциальные награды:</h4>
+                <h4>Potential Rewards:</h4>
                 <div className="rewards-grid">
                   <div className="reward-item">
-                    <span>За 30 дней:</span>
+                    <span>For 30 days:</span>
                     <span>{calculatePotentialRewards(parseFloat(stakeAmount), 30).toFixed(4)} WAL</span>
                   </div>
                   <div className="reward-item">
-                    <span>За 90 дней:</span>
+                    <span>For 90 days:</span>
                     <span>{calculatePotentialRewards(parseFloat(stakeAmount), 90).toFixed(4)} WAL</span>
                   </div>
                   <div className="reward-item">
-                    <span>За 365 дней:</span>
+                    <span>For 365 days:</span>
                     <span>{calculatePotentialRewards(parseFloat(stakeAmount), 365).toFixed(4)} WAL</span>
                   </div>
                 </div>
@@ -272,17 +272,17 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
               onClick={handleStake}
               disabled={loading || !stakeAmount || parseFloat(stakeAmount) <= 0 || parseFloat(stakeAmount) > walBalance}
             >
-              {loading ? 'Создание стейка...' : 'Создать стейк'}
+              {loading ? 'Creating stake...' : 'Create Stake'}
             </button>
 
             <div className="staking-info">
-              <h4>Условия стейкинга:</h4>
+              <h4>Staking Terms:</h4>
               <ul>
                 <li>APY: 12.5%</li>
-                <li>Период блокировки: 30 дней</li>
-                <li>Минимальная сумма: 1 WAL</li>
-                <li>Награды начисляются ежедневно</li>
-                <li>Можно собирать награды без завершения стейка</li>
+                <li>Lock-in Period: 30 days</li>
+                <li>Minimum Amount: 1 WAL</li>
+                <li>Rewards are accrued daily</li>
+                <li>You can claim rewards without unstaking</li>
               </ul>
             </div>
           </div>
@@ -296,33 +296,33 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
               userStakes.map((stake) => (
                 <div key={stake.stakeId} className={`stake-card ${stake.isActive ? 'active' : 'completed'}`}>
                   <div className="stake-header">
-                    <h4>Стейк #{stake.stakeId.slice(-8)}</h4>
+                    <h4>Stake #{stake.stakeId.slice(-8)}</h4>
                     <span className={`status ${stake.isActive ? 'active' : 'completed'}`}>
-                      {stake.isActive ? 'Активен' : 'Завершен'}
+                      {stake.isActive ? 'Active' : 'Completed'}
                     </span>
                   </div>
 
                   <div className="stake-details">
                     <div className="detail-row">
-                      <span>Сумма:</span>
+                      <span>Amount:</span>
                       <span>{stake.amount} WAL</span>
                     </div>
                     <div className="detail-row">
-                      <span>Дата создания:</span>
+                      <span>Start Date:</span>
                       <span>{formatDate(stake.startTime)}</span>
                     </div>
                     <div className="detail-row">
-                      <span>Разблокировка:</span>
+                      <span>Unlock Date:</span>
                       <span>{formatDate(stake.unlockTime)}</span>
                     </div>
                     <div className="detail-row">
-                      <span>Текущие награды:</span>
+                      <span>Current Rewards:</span>
                       <span className="rewards">{stake.currentRewards.toFixed(4)} WAL</span>
                     </div>
                     
                     {stake.isActive && !isStakeUnlocked(stake.unlockTime) && (
                       <div className="detail-row">
-                        <span>Дней до разблокировки:</span>
+                        <span>Days until unlock:</span>
                         <span>{getDaysRemaining(stake.unlockTime)}</span>
                       </div>
                     )}
@@ -335,7 +335,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
                         onClick={() => handleClaimRewards(stake.stakeId)}
                         disabled={loading || stake.currentRewards < 0.001}
                       >
-                        Собрать награды
+                        Claim Rewards
                       </button>
                       
                       <button
@@ -343,7 +343,7 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
                         onClick={() => handleUnstake(stake.stakeId)}
                         disabled={loading || !isStakeUnlocked(stake.unlockTime)}
                       >
-                        {isStakeUnlocked(stake.unlockTime) ? 'Завершить стейк' : 'Заблокирован'}
+                        {isStakeUnlocked(stake.unlockTime) ? 'Unstake' : 'Locked'}
                       </button>
                     </div>
                   )}
@@ -351,8 +351,8 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
               ))
             ) : (
               <div className="empty-state">
-                <p>У вас пока нет активных стейков</p>
-                <p>Создайте свой первый стейк во вкладке "Создать стейк"</p>
+                <p>You have no active stakes yet</p>
+                <p>Create your first stake in the "Create Stake" tab</p>
               </div>
             )}
           </div>
@@ -363,34 +363,34 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
         <div className="tab-content">
           <div className="stats-grid">
             <div className="stat-card">
-              <h4>Общая сумма в стейкинге</h4>
+              <h4>Total Amount Staked</h4>
               <div className="stat-value">{stakingStats.totalStaked.toLocaleString()} WAL</div>
             </div>
             
             <div className="stat-card">
-              <h4>Количество стейкеров</h4>
+              <h4>Number of Stakers</h4>
               <div className="stat-value">{stakingStats.totalStakers}</div>
             </div>
             
             <div className="stat-card">
-              <h4>Средний размер стейка</h4>
+              <h4>Average Stake Size</h4>
               <div className="stat-value">{stakingStats.averageStake.toLocaleString()} WAL</div>
             </div>
             
             <div className="stat-card">
-              <h4>Выплачено наград</h4>
+              <h4>Rewards Paid Out</h4>
               <div className="stat-value">{stakingStats.totalRewardsDistributed.toFixed(2)} WAL</div>
             </div>
             
             <div className="stat-card">
-              <h4>Текущий APY</h4>
+              <h4>Current APY</h4>
               <div className="stat-value">{stakingStats.currentAPY}%</div>
             </div>
           </div>
 
           {availablePools.length > 0 && (
             <div className="pools-info">
-              <h3>Доступные пулы</h3>
+              <h3>Available Pools</h3>
               <div className="pools-list">
                 {availablePools.map(pool => (
                   <div key={pool.poolId} className="pool-card">
@@ -401,15 +401,15 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
                         <span>{pool.apy}%</span>
                       </div>
                       <div className="detail-row">
-                        <span>Общий стейк:</span>
+                        <span>Total Staked:</span>
                         <span>{pool.totalStaked.toLocaleString()} WAL</span>
                       </div>
                       <div className="detail-row">
-                        <span>Период блокировки:</span>
-                        <span>{pool.lockPeriod} дней</span>
+                        <span>Lock-in Period:</span>
+                        <span>{pool.lockPeriod} days</span>
                       </div>
                       <div className="detail-row">
-                        <span>Минимальный стейк:</span>
+                        <span>Minimum Stake:</span>
                         <span>{pool.minStake} WAL</span>
                       </div>
                     </div>
@@ -425,4 +425,3 @@ const StakingComponent: React.FC<StakingComponentProps> = ({ onStakeComplete }) 
 };
 
 export default StakingComponent;
-

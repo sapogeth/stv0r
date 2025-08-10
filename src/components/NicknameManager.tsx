@@ -11,16 +11,16 @@ interface NicknameManagerProps {
   onNicknameUpdate?: (nickname: string) => void;
 }
 
-const NicknameManager: React.FC<NicknameManagerProps> = ({ 
-  currentNickname = '', 
-  onNicknameUpdate 
+const NicknameManager: React.FC<NicknameManagerProps> = ({
+  currentNickname = '',
+  onNicknameUpdate
 }) => {
   const [nickname, setNickname] = useState(currentNickname);
   const [isEditing, setIsEditing] = useState(false);
   const [nicknameOptions, setNicknameOptions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
-  
+
   const account = useCurrentAccount();
 
   useEffect(() => {
@@ -36,22 +36,22 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
 
   const handleSaveNickname = async () => {
     if (!nickname.trim()) return;
-    
+
     setLoading(true);
     try {
-      // В реальном приложении здесь будет API вызов
-      console.log('Сохранение никнейма:', nickname);
-      
+      // In a real application, this would be an API call
+      console.log('Saving nickname:', nickname);
+
       if (onNicknameUpdate) {
         onNicknameUpdate(nickname);
       }
-      
+
       setIsEditing(false);
-      alert('Никнейм успешно обновлен!');
-      
+      alert('Nickname updated successfully!');
+
     } catch (error) {
-      console.error('Ошибка сохранения никнейма:', error);
-      alert('Ошибка при сохранении никнейма');
+      console.error('Error saving nickname:', error);
+      alert('Error saving nickname');
     } finally {
       setLoading(false);
     }
@@ -59,19 +59,20 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
 
   const handleConvertToNFT = async () => {
     if (!account?.address || !nickname) return;
-    
+
     setLoading(true);
     try {
-      // Создаем NFT никнейм
-      const tokenId = 'nft_' + Date.now(); // В реальном приложении это будет ID из блокчейна
+      // Create an NFT nickname
+      // In a real application, this would be the ID from the blockchain
+      const tokenId = 'nft_' + Date.now(); 
       const nft = await createNicknameNFT(tokenId, nickname, account.address);
-      
+
       setIsNFT(true);
-      alert(`Никнейм "${nickname}" успешно конвертирован в NFT!`);
-      
+      alert(`Nickname "${nickname}" successfully converted to an NFT!`);
+
     } catch (error) {
-      console.error('Ошибка конвертации в NFT:', error);
-      alert('Ошибка при конвертации в NFT');
+      console.error('Error converting to NFT:', error);
+      alert('Error converting to NFT');
     } finally {
       setLoading(false);
     }
@@ -80,28 +81,28 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
   return (
     <div className="nickname-manager">
       <div className="nickname-display">
-        <h3>Ваш никнейм</h3>
+        <h3>Your Nickname</h3>
         {!isEditing ? (
           <div className="nickname-info">
             <div className="nickname-value">
-              {nickname || 'Не установлен'}
+              {nickname || 'Not set'}
               {isNFT && <span className="nft-badge">NFT</span>}
             </div>
             <div className="nickname-actions">
-              <button 
+              <button
                 className="edit-button"
                 onClick={() => setIsEditing(true)}
                 disabled={loading}
               >
-                Изменить
+                Edit
               </button>
               {!isNFT && nickname && (
-                <button 
+                <button
                   className="nft-button"
                   onClick={handleConvertToNFT}
                   disabled={loading}
                 >
-                  Конвертировать в NFT
+                  Convert to NFT
                 </button>
               )}
             </div>
@@ -109,19 +110,19 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
         ) : (
           <div className="nickname-editor">
             <div className="custom-nickname">
-              <label htmlFor="customNickname">Введите свой никнейм:</label>
+              <label htmlFor="customNickname">Enter your nickname:</label>
               <input
                 type="text"
                 id="customNickname"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                placeholder="Введите никнейм"
+                placeholder="Enter nickname"
                 maxLength={20}
               />
             </div>
-            
+
             <div className="nickname-suggestions">
-              <h4>Или выберите из предложенных:</h4>
+              <h4>Or choose from the suggestions:</h4>
               <div className="suggestions-grid">
                 {nicknameOptions.map((option, index) => (
                   <button
@@ -133,24 +134,24 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
                   </button>
                 ))}
               </div>
-              <button 
+              <button
                 className="generate-more"
                 onClick={generateNicknameVariants}
                 disabled={loading}
               >
-                Сгенерировать еще
+                Generate More
               </button>
             </div>
-            
+
             <div className="editor-actions">
-              <button 
+              <button
                 className="save-button"
                 onClick={handleSaveNickname}
                 disabled={loading || !nickname.trim()}
               >
-                {loading ? 'Сохранение...' : 'Сохранить'}
+                {loading ? 'Saving...' : 'Save'}
               </button>
-              <button 
+              <button
                 className="cancel-button"
                 onClick={() => {
                   setIsEditing(false);
@@ -158,7 +159,7 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
                 }}
                 disabled={loading}
               >
-                Отмена
+                Cancel
               </button>
             </div>
           </div>
@@ -169,4 +170,3 @@ const NicknameManager: React.FC<NicknameManagerProps> = ({
 };
 
 export default NicknameManager;
-

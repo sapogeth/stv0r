@@ -60,7 +60,7 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
       setPoolInfo(pool);
       setRemainingSponsored(getRemainingSponsored(account.address));
     } catch (error) {
-      console.error('Ошибка загрузки данных пользователя:', error);
+      console.error('Error loading user data:', error);
     }
   };
 
@@ -72,7 +72,7 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
       setQuote(quoteResult);
       setToAmount(quoteResult.amountOut.toString());
     } catch (error) {
-      console.error('Ошибка получения котировки:', error);
+      console.error('Error getting quote:', error);
       setQuote(null);
       setToAmount('');
     }
@@ -80,7 +80,7 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
 
   const handleSwap = async () => {
     if (!account?.address || !fromAmount || parseFloat(fromAmount) <= 0) {
-      alert('Введите корректную сумму для свапа');
+      alert('Enter a valid amount to swap');
       return;
     }
 
@@ -95,7 +95,7 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
       }
 
       if (result.success) {
-        alert(`Свап выполнен успешно! Получено: ${result.amountOut?.toFixed(4)} ${toToken}`);
+        alert(`Swap successful! Received: ${result.amountOut?.toFixed(4)} ${toToken}`);
         setFromAmount('');
         setToAmount('');
         setQuote(null);
@@ -105,11 +105,11 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
           onSwapComplete(result.txDigest);
         }
       } else {
-        alert(`Ошибка свапа: ${result.error}`);
+        alert(`Swap error: ${result.error}`);
       }
     } catch (error) {
-      console.error('Ошибка при выполнении свапа:', error);
-      alert('Произошла ошибка при выполнении свапа');
+      console.error('Error during swap execution:', error);
+      alert('An error occurred during the swap');
     } finally {
       setLoading(false);
     }
@@ -132,7 +132,7 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
     return (
       <div className="swap-component">
         <div className="connect-wallet-message">
-          <p>Подключите кошелек для использования свапа</p>
+          <p>Connect your wallet to use the swap feature</p>
         </div>
       </div>
     );
@@ -141,11 +141,11 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
   return (
     <div className="swap-component">
       <div className="swap-header">
-        <h2>Обмен токенов</h2>
+        <h2>Token Swap</h2>
         {remainingSponsored > 0 && (
           <div className="sponsored-info">
             <span className="sponsored-badge">
-              🎁 Осталось бесплатных транзакций: {remainingSponsored}
+              🎁 Free transactions remaining: {remainingSponsored}
             </span>
           </div>
         )}
@@ -155,9 +155,9 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
         <div className="token-input-group">
           <div className="token-input">
             <div className="token-header">
-              <span>Отдаете</span>
+              <span>You Pay</span>
               <span className="balance">
-                Баланс: {fromToken === 'SUI' ? balances.sui.toFixed(4) : balances.wal.toFixed(4)} {fromToken}
+                Balance: {fromToken === 'SUI' ? balances.sui.toFixed(4) : balances.wal.toFixed(4)} {fromToken}
               </span>
             </div>
             <div className="input-row">
@@ -185,9 +185,9 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
 
           <div className="token-input">
             <div className="token-header">
-              <span>Получаете</span>
+              <span>You Receive</span>
               <span className="balance">
-                Баланс: {toToken === 'SUI' ? balances.sui.toFixed(4) : balances.wal.toFixed(4)} {toToken}
+                Balance: {toToken === 'SUI' ? balances.sui.toFixed(4) : balances.wal.toFixed(4)} {toToken}
               </span>
             </div>
             <div className="input-row">
@@ -208,17 +208,17 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
         {quote && (
           <div className="swap-details">
             <div className="detail-row">
-              <span>Курс:</span>
+              <span>Rate:</span>
               <span>1 {fromToken} = {(quote.amountOut / parseFloat(fromAmount)).toFixed(6)} {toToken}</span>
             </div>
             <div className="detail-row">
-              <span>Влияние на цену:</span>
+              <span>Price Impact:</span>
               <span className={quote.priceImpact > 5 ? 'high-impact' : 'low-impact'}>
                 {quote.priceImpact}%
               </span>
             </div>
             <div className="detail-row">
-              <span>Комиссия:</span>
+              <span>Fee:</span>
               <span>{quote.fee} {fromToken}</span>
             </div>
           </div>
@@ -229,24 +229,24 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
           onClick={handleSwap}
           disabled={loading || !fromAmount || parseFloat(fromAmount) <= 0 || !quote}
         >
-          {loading ? 'Выполняется свап...' : `Обменять ${fromToken} на ${toToken}`}
+          {loading ? 'Swapping...' : `Swap ${fromToken} for ${toToken}`}
         </button>
       </div>
 
       {poolInfo && (
         <div className="pool-info">
-          <h3>Информация о пуле</h3>
+          <h3>Pool Information</h3>
           <div className="pool-stats">
             <div className="stat">
-              <span>Резерв SUI:</span>
+              <span>SUI Reserve:</span>
               <span>{poolInfo.suiReserve.toLocaleString()}</span>
             </div>
             <div className="stat">
-              <span>Резерв WAL:</span>
+              <span>WAL Reserve:</span>
               <span>{poolInfo.walReserve.toLocaleString()}</span>
             </div>
             <div className="stat">
-              <span>Текущий курс:</span>
+              <span>Current Rate:</span>
               <span>1 SUI = {poolInfo.currentPrice} WAL</span>
             </div>
           </div>
@@ -255,7 +255,7 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
 
       {swapHistory.length > 0 && (
         <div className="swap-history">
-          <h3>История свапов</h3>
+          <h3>Swap History</h3>
           <div className="history-list">
             {swapHistory.slice(0, 5).map((swap, index) => (
               <div key={index} className="history-item">
@@ -286,4 +286,3 @@ const SwapComponent: React.FC<SwapComponentProps> = ({ onSwapComplete }) => {
 };
 
 export default SwapComponent;
-

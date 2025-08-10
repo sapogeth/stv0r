@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useCurrentAccount } from '@mysten/dapp-kit';
-import { 
-  searchUsersByNickname, 
-  getPopularNicknames, 
+import {
+  searchUsersByNickname,
+  getPopularNicknames,
   checkNicknameAvailability,
-  type UserSearchResult 
+  type UserSearchResult
 } from '../services/userSearchService';
 import { getOrCreateChat } from '../services/chatService';
 import '../styles/UserSearch.css';
@@ -21,7 +21,7 @@ interface UserSearchProps {
 const UserSearch: React.FC<UserSearchProps> = ({
   onUserSelect,
   onChatStart,
-  placeholder = "Поиск пользователей по никнейму...",
+  placeholder = "Search users by nickname...",
   showStartChatButton = true
 }) => {
   const currentAccount = useCurrentAccount();
@@ -51,7 +51,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
     return () => clearTimeout(delayedSearch);
   }, [query]);
 
-  // Закрытие dropdown при клике вне компонента
+  // Close dropdown on click outside the component
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -68,7 +68,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
       const popular = await getPopularNicknames(8);
       setPopularNicknames(popular);
     } catch (error) {
-      console.error('Ошибка загрузки популярных никнеймов:', error);
+      console.error('Error loading popular nicknames:', error);
     }
   };
 
@@ -82,7 +82,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
       setShowDropdown(true);
       setSelectedIndex(-1);
     } catch (error) {
-      console.error('Ошибка поиска:', error);
+      console.error('Search error:', error);
       setResults([]);
     } finally {
       setLoading(false);
@@ -110,7 +110,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setSelectedIndex(prev => 
+        setSelectedIndex(prev =>
           prev < results.length - 1 ? prev + 1 : prev
         );
         break;
@@ -143,12 +143,12 @@ const UserSearch: React.FC<UserSearchProps> = ({
 
   const handleStartChat = async (userResult: UserSearchResult) => {
     if (!currentAccount?.address) {
-      alert('Подключите кошелек для начала чата');
+      alert('Connect your wallet to start a chat');
       return;
     }
 
     if (currentAccount.address === userResult.user.walletAddress) {
-      alert('Нельзя начать чат с самим собой');
+      alert('You cannot start a chat with yourself');
       return;
     }
 
@@ -162,8 +162,8 @@ const UserSearch: React.FC<UserSearchProps> = ({
         onChatStart(chat.id);
       }
     } catch (error) {
-      console.error('Ошибка создания чата:', error);
-      alert('Ошибка при создании чата');
+      console.error('Error creating chat:', error);
+      alert('Error while creating chat');
     }
   };
 
@@ -193,7 +193,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
           {results.length > 0 ? (
             <div className="search-results">
               <div className="results-header">
-                Найдено пользователей: {results.length}
+                Users found: {results.length}
               </div>
               {results.map((result, index) => (
                 <div
@@ -207,7 +207,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
                     <div className="nickname-display">
                       <span className="nickname">@{result.nickname}</span>
                       {result.isActive && (
-                        <span className="active-badge">Активный</span>
+                        <span className="active-badge">Active</span>
                       )}
                     </div>
                     <div className="user-details">
@@ -217,7 +217,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
                       </span>
                       {result.allNicknames.length > 1 && (
                         <span className="nickname-count">
-                          +{result.allNicknames.length - 1} никнейм(ов)
+                          +{result.allNicknames.length - 1} nickname(s)
                         </span>
                       )}
                     </div>
@@ -231,7 +231,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
                         handleStartChat(result);
                       }}
                     >
-                      💬 Чат
+                      💬 Chat
                     </button>
                   )}
                 </div>
@@ -239,8 +239,8 @@ const UserSearch: React.FC<UserSearchProps> = ({
             </div>
           ) : query.trim() && !loading ? (
             <div className="no-results">
-              <p>Пользователи с никнеймом "{query}" не найдены</p>
-              <p>Попробуйте другой поисковый запрос</p>
+              <p>Users with the nickname "{query}" were not found</p>
+              <p>Try a different search query</p>
             </div>
           ) : null}
         </div>
@@ -248,7 +248,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
 
       {!showDropdown && popularNicknames.length > 0 && !query.trim() && (
         <div className="popular-nicknames">
-          <div className="popular-header">Популярные никнеймы:</div>
+          <div className="popular-header">Popular Nicknames:</div>
           <div className="popular-list">
             {popularNicknames.map((nickname) => (
               <button

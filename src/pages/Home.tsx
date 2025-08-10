@@ -6,10 +6,10 @@ import KioskComponent from '../components/KioskComponent';
 import UserProfile from '../components/UserProfile';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
 import { useUserNickname } from '../hooks/useUserNickname';
-import '../stvor.css';
+import '../base.css';
 import '../styles/nickname.css';
 
-// Импортируем SetupPassword, если он все еще в отдельном файле
+// Import SetupPassword if it's still in a separate file
 import { SetupPassword } from '../components/SetupPassword'; 
 
 const client = new SuiClient({ url: getFullnodeUrl('testnet') });
@@ -22,18 +22,18 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState<'profile' | 'kiosk'>('profile');
   const address = currentAccount?.address;
 
-  // Используем хук для автоматического управления никнеймами
+  // Use the hook for automatic nickname management
   const { nickname, loading: nicknameLoading } = useUserNickname();
 
   useEffect(() => {
     const fetchBalances = async () => {
-      if (!currentAccount) return;
+      if (!currentAccount || !address) return;
       try {
         const suiBalanceData = await client.getBalance({ owner: address, coinType: '0x2::sui::SUI' });
-        setSuiBalance(`${(suiBalanceData.totalBalance / 1_000_000_000).toFixed(2)} SUI`);
+        setSuiBalance(`${(parseInt(suiBalanceData.totalBalance) / 1_000_000_000).toFixed(2)} SUI`);
 
         const walBalanceData = await client.getBalance({ owner: address, coinType: '0x8190b04::wal::WAL' }).catch(() => null);
-        setWalBalance(walBalanceData ? `${(walBalanceData.totalBalance / 1_000_000_000).toFixed(2)} WAL` : '0 WAL');
+        setWalBalance(walBalanceData ? `${(parseInt(walBalanceData.totalBalance) / 1_000_000_000).toFixed(2)} WAL` : '0 WAL');
       } catch (error) {
         console.error('Error fetching balances:', error);
         setSuiBalance('Error');
@@ -51,12 +51,13 @@ const Home = () => {
     setSuiBalance('Loading...');
     setWalBalance('Loading...');
     const fetchBalances = async () => {
+      if (!address) return;
       try {
         const suiBalanceData = await client.getBalance({ owner: address, coinType: '0x2::sui::SUI' });
-        setSuiBalance(`${(suiBalanceData.totalBalance / 1_000_000_000).toFixed(2)} SUI`);
+        setSuiBalance(`${(parseInt(suiBalanceData.totalBalance) / 1_000_000_000).toFixed(2)} SUI`);
 
         const walBalanceData = await client.getBalance({ owner: address, coinType: '0x8190b04::wal::WAL' }).catch(() => null);
-        setWalBalance(walBalanceData ? `${(walBalanceData.totalBalance / 1_000_000_000).toFixed(2)} WAL` : '0 WAL');
+        setWalBalance(walBalanceData ? `${(parseInt(walBalanceData.totalBalance) / 1_000_000_000).toFixed(2)} WAL` : '0 WAL');
       } catch (error) {
         console.error('Error fetching balances:', error);
         setSuiBalance('Error');
@@ -66,9 +67,9 @@ const Home = () => {
     fetchBalances();
   };
 
+  // If the user is not logged in, Home displays nothing,
+  // as App.tsx will redirect to /login
   if (!currentAccount) {
-    // Если пользователь не залогинен, Home ничего не отображает,
-    // так как App.tsx перенаправит на /login
     return null; 
   }
 
@@ -77,26 +78,26 @@ const Home = () => {
       <div className="chat-sidebar">
         <h1 className="chat-header">STVOR</h1>
         
-        {/* Отображение никнейма пользователя */}
+        {/* Display user's nickname */}
         <div className="user-info">
           <div className="user-greeting">
-            <h3>👋 Привет, @{nicknameLoading ? 'загрузка...' : (nickname || 'пользователь')}!</h3>
+            <h3>👋 Hello, @{nicknameLoading ? 'loading...' : (nickname || 'user')}!</h3>
             {!nicknameLoading && nickname && (
-              <p className="nickname-status">Ваш уникальный никнейм</p>
+              <p className="nickname-status">Your unique nickname</p>
             )}
           </div>
           <div className="user-status">
-            🔒 Подключен безопасно через кошелек
+            🔒 Securely connected via wallet
           </div>
           {!nicknameLoading && !nickname && (
             <div className="nickname-warning">
-              ⚠️ Никнейм не найден. Обновите страницу.
+              ⚠️ Nickname not found. Please refresh the page.
             </div>
           )}
         </div>
 
         <div className="chat-sidebar-account">
-          <p>Кошелек:</p>
+          <p>Wallet:</p>
           <p>
             <strong>{currentAccount.address.slice(0, 8)}...{currentAccount.address.slice(-6)}</strong>
           </p>
@@ -107,7 +108,7 @@ const Home = () => {
             className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
             onClick={() => setActiveTab('profile')}
           >
-            Профиль
+            Profile
           </button>
           <button 
             className={`tab-btn ${activeTab === 'kiosk' ? 'active' : ''}`}
@@ -120,19 +121,19 @@ const Home = () => {
         <LogoutButton />
         
         <div className="sidebar-actions">
-          {/* ✅ Здесь мы включаем компонент SetupPassword */}
+          {/* ✅ Here we include the SetupPassword component */}
           <SetupPassword /> 
 
           <div className="balance-info">
-            <p>Баланс SUI: {suiBalance}</p>
-            <p>Баланс WAL: {walBalance}</p>
+            <p>SUI Balance: {suiBalance}</p>
+            <p>WAL Balance: {walBalance}</p>
             <button onClick={refreshBalances} className="refresh-btn">
-              Обновить балансы
+              Refresh Balances
             </button>
           </div>
           
           <button onClick={goToMarketplace} className="marketplace-btn" disabled={!currentAccount}>
-            Перейти в маркетплейс
+            Go to Marketplace
           </button>
         </div>
       </div>
